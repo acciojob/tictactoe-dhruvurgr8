@@ -1,1 +1,22 @@
 /*  your css code here. If applicable */
+.board{
+	display:grid;
+	grid-template-columns:repeat(3,100px);
+}
+.board div{
+	border:2px solid black;
+	height:100px;
+	background-color:#FFC0CB;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+}
+h1{
+	text-align:center;
+}
+.form input {
+	margin-bottom:10px;
+}
+.form{
+	text-align:center;
+}
