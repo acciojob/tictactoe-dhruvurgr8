@@ -6,6 +6,7 @@ let player_turn = document.querySelector('.turn');
 
 let player_1 = "";
 let player_2 = "";
+let currentPlayer = ""; // New variable to track the current player
 
 startGameBtn.addEventListener('click', () => {
     player_1 = form.player1.value;
@@ -15,30 +16,27 @@ startGameBtn.addEventListener('click', () => {
     gameForm.style.display = 'none';
     gameBoard.style.display = 'grid';
 
+    currentPlayer = player_1; // Set the current player to player 1
     player_turn.textContent = `${player_1}, you're up`;
 });
 
-let turn = 1;
-let boardState = ['', '', '', '', '', '', '', '', '']; // Represents the state of each cell on the board
+let boardState = ['', '', '', '', '', '', '', '', ''];
 
 const cells = document.querySelectorAll('.board .cell');
 
 cells.forEach((cell, index) => {
     cell.addEventListener('click', () => {
         if (boardState[index] === '' && !checkWinner()) {
-            if (turn % 2 === 1) {
-                player_turn.textContent = `${player_1}, you're up`;
-                cell.textContent = "X";
-                boardState[index] = 'X';
-            } else {
-                player_turn.textContent = `${player_2}, you're up`;
-                cell.textContent = "O";
-                boardState[index] = 'O';
-            }
-            turn++;
+            cell.textContent = currentPlayer === player_1 ? "X" : "O";
+            boardState[index] = currentPlayer === player_1 ? 'X' : 'O';
 
             if (checkWinner()) {
-                player_turn.textContent = `${turn % 2 === 0 ? player_1 : player_2} congratulations, you won!`;
+                player_turn.textContent = `${currentPlayer} congratulations, you won!`;
+            } else if (!boardState.includes('')) {
+                player_turn.textContent = 'It\'s a tie!';
+            } else {
+                currentPlayer = (currentPlayer === player_1) ? player_2 : player_1; // Switch player turns
+                player_turn.textContent = `${currentPlayer}, you're up`;
             }
         }
     });
@@ -56,12 +54,6 @@ function checkWinner() {
         if (boardState[a] !== '' && boardState[a] === boardState[b] && boardState[b] === boardState[c]) {
             return true; // We have a winner
         }
-    }
-
-    // Check for a tie
-    if (!boardState.includes('')) {
-        player_turn.textContent = 'It\'s a tie!';
-        return true;
     }
 
     return false;
